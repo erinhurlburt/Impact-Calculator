@@ -1,0 +1,72 @@
+import ipywidgets as widgets
+
+value = widgets.FloatText(
+    value=10.0,
+    description='',
+    disabled=False
+)
+
+convertFrom = widgets.Dropdown(
+    options=['minutes of showering', 'minutes of watering a lawn', 'minutes running a dishwasher', 'times running a washing-machine', 'times taking a shower (10 minutes)', 'times running a dryer-machine'], # list of your activities as strings
+    value='minutes of showering', # one of your activities to be the default option
+    description='',
+    disabled=False,
+)
+
+convertTo = widgets.Dropdown(
+    options=['minutes of showering', 'minutes of watering a lawn', 'minutes running a dishwasher', 'times running a washing-machine', 'times taking a shower (10 minutes)', 'times running a dryer-machine'], # list of your activities as strings
+    value='minutes of watering a lawn', # one of your activities to be the default option
+    description='compared to',
+    disabled=False,
+)
+
+button = widgets.Button(
+    description='Calculate',
+    disabled=False,
+    button_style='info', # 'success', 'info', 'warning', 'danger' or ''
+    tooltip='',
+    icon="" # (FontAwesome names without the `fa-` prefix)
+)
+
+def call_convert(_):
+    convert(value.value, convertFrom.value, convertTo.value)
+    
+button.on_click(call_convert)
+
+
+items = [value, convertFrom, convertTo]
+left_box = widgets.VBox([items[0], items[2]])
+right_box = widgets.VBox([items[1], button])
+widgets.HBox([left_box, right_box])
+
+
+
+def convert(val, start, end):
+
+    
+    water = {
+            'minutes of showering': 5,
+            'minutes of watering a lawn': 17,
+            'minutes running a dishwasher': 6,
+            }
+    
+    carbon = {
+            'times running a washing-machine': 0.6,
+            'times taking a shower (10 minutes)': 2.5,
+            'times running a dryer-machine': 2,
+            }
+    
+
+    if start in water and end in water:
+        gallons = water[start]*val
+        minutes = gallons/water[end]
+        print(minutes, 'minutes')
+    elif start in carbon and end in carbon:
+        kilograms = carbon[start]*val
+        times = kilograms/carbon[end]
+        print(times, 'times')
+    else:
+        print('Sorry those values do not convert. Try two from the same category!')
+        
+
+   
